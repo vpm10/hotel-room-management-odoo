@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="order_list_view" model="ir.ui.view">
+            <field name="name">order.list.tree</field>
+            <field name="model">order.list</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="quantity"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field  name="unit_price"/>
+                    <field name="sub_total"/>
+                </tree>
+            </field>
+        </record>
+    </data>
+</odoo>

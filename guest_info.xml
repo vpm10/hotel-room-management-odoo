@@ -1,0 +1,14 @@
+<odoo>
+    <record id="guest_info" model="ir.ui.view">
+        <field name="name">Guest info</field>
+        <field name="model">guest.info</field>
+        <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="guest_id"/>
+                    <field name="gender"/>
+                    <field name="age"/>
+                </tree>
+            </field>
+    </record>
+
+</odoo>

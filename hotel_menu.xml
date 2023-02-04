@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <menuitem id="test_menu_root" name="Hotel Room Management">
+            <menuitem id="test_first_level_menu" name="Reception" >
+                <menuitem id="test_model_menu_action" action="guest_details_action" />
+            </menuitem>
+        </menuitem>
+        <menuitem id="test_menu_root" name="Hotel Room Management">
+            <menuitem id="test_second_level_menu" name="Configuration" >
+                <menuitem id="test_model_confi_action" action="hotel_room_action" />
+                <menuitem id="test_second_confi_action" action="facility_action" />
+                <menuitem id="test_third_confi_action" action="order_food_action"/>
+                <menuitem id="test_forth_confi_action" action="food_category"/>
+                <menuitem id="test_fifth_confi_action" action="food_item"/>
+
+            </menuitem>
+        </menuitem>
+    </data>
+</odoo>

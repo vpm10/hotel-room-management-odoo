@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="guest_details_tree" model="ir.ui.view">
+        <field name="name">guest.details.tree</field>
+        <field name="model">guest.details</field>
+        <field name="arch" type="xml">
+            <tree string='new' default_order="check_in desc" decoration-warning="check_out_warning" decoration-danger="late_check_out_danger">
+                <field name="name"/>
+                <field name="guest_id"/>
+                <field name="address"/>
+                <field name="room_id"/>
+                <field name="check_out" string="Check out"/>
+                <field name="state"
+                       attrs="{'column_invisible': [('state', '=', False)]}"/>
+                <field name="bed" optional="hide"/>
+                <field name="expected_date"/>
+                <field name="late_check_out_danger" optional="hide" />
+                <field name="check_out_warning" optional="hide" />
+            </tree>
+
+        </field>
+
+    </record>
+    <record id="guest_details_form" model="ir.ui.view">
+        <field name="name">guest.details.form</field>
+        <field name="model">guest.details</field>
+        <field name="arch" type="xml">
+            <form>
+
+                <header>
+                    <button name="button_in_draft" class="oe_highlight"
+                            states="draft" string="Check in"
+                            type="object"/>
+                    <button name="button_in_progress" class="oe_highlight"
+                            states="check_in" string="Check out"
+                            type="object"/>
+                    <button name="button_in_checkout" class="oe_highlight"
+                            states="draft" string="Cancel"
+                            type="object"/>
+
+                    <field name="state" widget="statusbar" context="{}"
+                           statusbar_visible="draft,check_in,check_out"/>
+
+                </header>
+
+
+                <sheet>
+                    <div name="button_box" position="inside">
+                    <button class="oe_stat_button" type="object" name="get_invoice" string="Invoices"
+                        icon="fa-pencil-square-o" attrs="{'invisible': [('payment_stage', '=', False)]}">
+                    </button>
+                </div>
+                    <widget name="web_ribbon" title="Paid" bg_color="bg-success" attrs="{'invisible': [('payment_stage', '=', False)]}" />
+
+                    <h1>
+                            <field name="name"/>
+                    </h1>
+
+
+                    <group>
+
+                        <separator/>
+                        <group>
+                            <field name="guest_id"/>
+                        </group>
+                        <field name="address"/>
+                        <group>
+                            <field name="number_of_guests"/>
+                            <field name="bed"/>
+                            <field name="facilities_ids"
+                                   widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="room_id" widget='selection'/>
+                            <field name="rent"/>
+                             <field name="expected_days"
+                                   attrs="{'invisible': ['|',('state', '=', 'check_out'),('state', '=', 'cancel')]}"/>
+                        <field name="expected_date"
+                                   attrs="{'invisible': ['|',('state', '=', 'check_out'),('state', '=', 'cancel')]}"/>
+                        <field name="check_in"
+                                   attrs="{'invisible': [('state', '=', 'draft')],'readonly':[('state', '!=', 'draft')]}"/>
+                        <field name="check_out"
+                                   />
+                            <field name="total_rent"/>
+                            <field name="payment_stage"  attrs="{'invisible': 1}"/>
+
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Guest info">
+                            <group>
+                                <field name="guest_info_ids" string=""/>
+                            </group>
+
+                        </page>
+                        <page string="Payment">
+                            <group>
+                                <field name="payment_calculation_ids" string=""/>
+                            </group>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="currency_id" invisible="1"/>
+                                <field name="total_amount"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+            </form>
+        </field>
+    </record>
+    <record id="guest_detail_search_view" model="ir.ui.view">
+        <field name="name">guest.details.search</field>
+        <field name="model">guest.details</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="guest_id"/>
+                <field name="room_id"/>
+
+                <filter string="Single bed" name="bed"
+                        domain="[('bed', '=', 'single')]"/>
+                <filter string="Double bed" name="bed"
+                        domain="[('bed', '=', 'double')]"/>
+                <filter string="Dormitory" name="bed"
+                        domain="[('bed', '=', 'dormitory')]"/>
+                <filter string="Facility" name="facilities_ids"
+                        domain="[('facilities_ids.id', '!=', 0)]"/>
+                <filter string="Checked in" name="check_in"
+                        domain="[('state', '=', 'check_in')]"/>
+                <filter string="Check out today" name="checked_out"
+                        domain="[('check_out','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0))), ('check_out','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)))]"/>
+
+                <!--                    <filter string="Check out tomorrow" name="check_out"-->
+                <!--                            domain="[('check_out','&gt;=', datetime.datetime.combine(context_today(), datetime.time(0,0,0)+relativedelta(1))), ('check_out','&lt;=', datetime.datetime.combine(context_today(), datetime.time(23,59,59)+relativedelta(1)))]"/>-->
+
+
+                <group expand="1" string="Group By">
+                    <filter string="Facility" name="facilities_ids"
+                            context="{'group_by':'facilities_ids'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter string="Room" name="room_id"
+                            context="{'group_by':'room_id'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter string="State" name="state"
+                            context="{'group_by':'state'}"/>
+                </group>
+                <group expand="1" string="Group By">
+                    <filter string="Type" name="bed"
+                            context="{'group_by':'bed'}"/>
+                </group>
+            </search>
+        </field>
+
+
+    </record>
+
+
+    <record id="seq_hotel" model="ir.sequence">
+        <field name="name">Name</field>
+        <field name="code">guest.details</field>
+        <field name="prefix">HM/ROOM/</field>
+        <field name="padding">4</field>
+    </record>
+     <record id="guest_details_action" model="ir.actions.act_window">
+        <field name="name">Accommodation</field>
+        <field name="res_model">guest.details</field>
+        <field name="domain">[('state', '!=', 'cancel')]</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

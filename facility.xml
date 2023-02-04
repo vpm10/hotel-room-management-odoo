@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="facility_action" model="ir.actions.act_window">
+        <field name="name">Facilities</field>
+        <field name="res_model">facility</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+     <record id="facility_ne" model="ir.ui.view">
+        <field name="name">Facilities</field>
+        <field name="model">facility</field>
+        <field name="arch" type="xml">
+                <tree editable="bottom">
+                    <field name="name"/>
+                </tree>
+            </field>
+    </record>
+
+
+</odoo>

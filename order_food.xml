@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <data>
+        <record id="order_food_action" model="ir.actions.act_window">
+            <field name="name">Order Food</field>
+            <field name="res_model">order.food</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+        <record id="order_food_view" model="ir.ui.view">
+            <field name="name">order.food.tree</field>
+            <field name="model">order.food</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="guest"/>
+                    <field name="room_number_id"/>
+                    <field name="order_time"/>
+                </tree>
+            </field>
+
+        </record>
+
+        <record id="order_food_kanban" model="ir.ui.view">
+            <field name="name">order.food.form</field>
+            <field name="model">order.food</field>
+            <field name="arch" type="xml">
+
+                <form>
+
+
+                    <sheet>
+                        <group>
+                            <field name="room_number_id"/>
+                            <field name="guest"/>
+
+                            <field name="order_time"/>
+                        </group>
+                        <notebook>
+
+                            <page string="Menu">
+                                <group>
+                                    <field name="category_ids"
+                                           widget="many2many_tags"/>
+                                </group>
+                                <div>
+                                    <group>
+                                        <field name="food_item_ids">
+                                            <kanban action="action_order_food"
+                                                    type="object">
+                                                <field name="name"/>
+                                                <field name="price"/>
+                                                <field name="currency_id" invisible="1"/>
+
+                                                <field name="image"/>
+                                                                                                                        <field name="uom_id"/>
+
+                                                <templates>
+                                                    <t t-name="kanban-box">
+
+                                                        <div t-attf-class="oe_kanban_global_click">
+                                                            <div class="o_kanban_image">
+                                                                <field name="image"
+                                                                       nolabel="1"
+                                                                       widget="image"/>
+
+                                                            </div>
+                                                            <div class="oe_kanban_details">
+                                                                <ul>
+                                                                    <div>
+                                                                    </div>
+                                                                    <li class="mb4">
+                                                                        <h3>
+                                                                            <field name="name"/>
+                                                                        </h3>
+                                                                    </li>
+                                                                    <li>
+                                                                        <field name="price"/>
+                                                                    </li>
+                                                                    <li>
+                                                                        <field name="uom_id"/>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </templates>
+                                            </kanban>
+                                        </field>
+                                    </group>
+                                </div>
+                            </page>
+                            <page string="Order List">
+                                <field name="order_list_ids"/>
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="currency_id" invisible="1"/>
+                                    <field name="total_amount" string="Total"/>
+                                </group>
+                            </page>
+                        </notebook>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>
